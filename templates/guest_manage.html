@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Starter Template for Bootstrap</title>
+{% load static %}
+    <!-- Bootstrap core CSS -->
+    <link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="{% static "css/starter-template.css" %}" rel="stylesheet">
+
+  </head>
+
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/manage">发布会签到系统</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li ><a href="/manage">发布会</a></li>
+            <li class="active"><a href="/guest">嘉宾</a></li>
+            <li><a href="/logout">退出</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+
+      <div class="starter-template">
+      <div class="row">
+        <div class="col-md-6">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>id</th>
+                <th>姓名</th>
+                <th>邮箱</th>
+                <th>手机</th>
+                <th>签到</th>
+                <th>发布会</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for guest in guests %}
+              <tr>
+                <td>{{ guest.id }}</td>
+                <td>{{ guest.realname }}</td>
+                <td>{{ guest.email }}</td>
+                <td>{{ guest.phone }}</td>
+                <td>{{ guest.sign  }}</td>
+                <td>{{ guest.event.name  }}</td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        </div>
+    </div>
+            <!-- 列表分页器 -->
+    <div class="pagination">
+      <span class="step-links">
+        {% if guests.has_previous %}
+          <a href="?phone={{ phone }}&page={{ guests.previous_page_number }}">previous</a>
+        {% endif %}
+          <span class="current">
+            Page {{ guests.number }} of {{ guests.paginator.num_pages }}.
+          </span>
+        {% if guests.has_next %}
+           <a href="?page={{ guests.next_page_number }}">next</a>
+        {% endif %}
+      </span>
+    </div>
+    </div>
+
+  </body>
+</html>
+
+<style>
+    .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th
+    {
+        text-align: left;
+    }
+
+</style>

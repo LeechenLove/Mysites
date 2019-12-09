@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>管理页面</title>
+</head>
+<body>
+    <h1>This is a manage page!</h1>
+    欢迎，{{ welcome_user }}！
+    <a href="logout">Logout</a><br>
+{% for event in events %}
+    {{ event.name }}<br>
+    {{ event.address }}<br>
+    {{ event.start_time }}<br>
+{% endfor %}
+</body>
+</html>
