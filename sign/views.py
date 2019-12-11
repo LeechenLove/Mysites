@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,get_object_or_404
 from django.http import HttpResponse,HttpResponseRedirect
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
@@ -71,18 +71,36 @@ def event_search(request):
         return response
 
 @login_required
-def event_search(request):
+def sign_index(request, event_id):
     """嘉宾签到"""
-    #cookie_user = request.COOKIES.get('user') #读取浏览器cookie
-    if request.method == "GET":
-        event_name = request.GET.get("name", "")
-        event_list = Event.objects.filter(name__contains=event_name)
-        return render(request, "event_manage.html", {
-                      'events':event_list})
-    else:
-        response = HttpResponseRedirect('/manage')
-        return response
 
+    event = get_object_or_404(Event, id=event_id)
+    if request.method == "GET":
+        # event_list = Event.objects.filter(id = event_id)
+
+        return render(request, "sign_index.html", {
+                      'event':event})
+    else:
+        phone = request.POST.get("phone", "")
+        print(phone)
+        guest = Guest.objects.filter(phone=phone)
+        if len(guest) == 0:
+            return render(request, "sign_index.html", {
+                'hint': "手机号不存在",'event':event })
+        guest = Guest.objects.filter(event_id = event_id, phone=phone)
+        if len(guest) == 0:
+            return render(request, "sign_index.html", {
+                'hint': "该手机号未参加本次活动！",'event':event})
+
+        guest = Guest.objects.get(event_id=event_id, phone=phone)
+        if guest.sign is False:
+            guest.sign = True
+            guest.save()
+            return render(request, "sign_index.html", {
+                'hint': "签到成功！",'event':event})
+        else:
+            return render(request, "sign_index.html", {
+                'hint': "用户已签到！",'event':event})
 
 def logout(request):
     """登出"""

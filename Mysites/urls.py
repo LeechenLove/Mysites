@@ -26,7 +26,7 @@ urlpatterns = [
     # path('login_action', views.login_action),
     path('manage', views.manage),
     path('event_search', views.event_search),
-    path('sign_index/<int:sid>', views.sign_index),
+    path('sign_index/<int:event_id>', views.sign_index),
 
     path('guest', views.guest),
     path('logout', views.logout),
